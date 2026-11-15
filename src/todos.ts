@@ -21,7 +21,7 @@ export async function createTodo(input: NewTodo): Promise<db.Todo> {
     dueDate: input.dueDate,
   };
 
-  db.save(todo);
+  await db.save(todo);
 
   logEvent(`created todo ${todo.id}`);
   return todo;
@@ -42,10 +42,10 @@ export function summary(todo: db.Todo): string {
 
 export function paginate<T>(items: T[], page: number, pageSize: number): T[] {
   const start = (page - 1) * pageSize;
-  const end = page * pageSize - 1;
+  const end = page * pageSize;
   return items.slice(start, end);
 }
 
 export function countCompleted(todos: db.Todo[]): number {
-  return todos.filter((t) => (t.completed as unknown as string) == 'true').length;
+  return todos.filter((t) => t.completed).length;
 }
